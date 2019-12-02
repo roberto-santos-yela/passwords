@@ -8,4 +8,21 @@ class Category extends Model
 {
     protected $table = 'categories'; 
     protected $fillable = ['id', 'name'];
+
+    public function user()
+    {
+
+        return $this->belongsTo(User::class);
+
+    }
+
+    public function passwords()
+    {
+
+        return $this->hasMany(Password::class);
+
+    }
+
+
+
 }
