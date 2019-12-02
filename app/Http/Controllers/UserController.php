@@ -51,7 +51,6 @@ class UserController extends Controller
 
         ], 200);
 
-
     }
 
     /**
@@ -98,4 +97,27 @@ class UserController extends Controller
     {
         //
     }
+
+    public function login(Request $request)
+    {
+        $user = User::where('email', '=', $request->email)->first();
+        
+        if($user->password == $request->password)
+        {
+            return response()->json("Puedes pasar");
+        
+        }else{
+
+            return response()->json("No puedes pasar");
+
+        }
+
+        return response()->json([
+
+            "user name" => $user->name, 
+
+        ]); 
+        
+    }
+
 }
