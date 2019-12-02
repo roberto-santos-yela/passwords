@@ -17,8 +17,16 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('login', 'UserController@login');
+Route::post('/login', 'UserController@login');
+Route::post('/create_user', 'UserController@store');
 
-Route::ApiResource('/users', 'UserController');
-Route::ApiResource('/categories', 'CategoryController');
-Route::ApiResource('/passwords', 'PasswordController');
+Route::group(['middleware' => ['auth']], function () {
+    
+    Route::ApiResource('/users', 'UserController');
+    Route::ApiResource('/categories', 'CategoryController');
+    Route::ApiResource('/passwords', 'PasswordController');
+
+});
+
+
+
