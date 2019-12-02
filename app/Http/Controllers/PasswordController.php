@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Password;
 use Illuminate\Http\Request;
 
 class PasswordController extends Controller
@@ -34,7 +35,17 @@ class PasswordController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $password = new Password();
+        $password->title = $request->title;
+        $password->password = $request->password;
+        //$password->save();
+
+        return response()->json([
+
+            "title" => $password->title,
+            "password" => $password->password,
+            
+        ], 200);
     }
 
     /**
