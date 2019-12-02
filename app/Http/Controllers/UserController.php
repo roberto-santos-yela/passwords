@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Helpers\Token;
 use Illuminate\Http\Request;
 
 
@@ -36,21 +37,20 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = $request->password;
-        $user->save();
+        //$user->save();
+
+        $token = new Token($user->email);
+        $coded_token = $token->encode();
 
         return response()->json([
 
-            "name" => $user->name,
-            "email" => $user->email,
-            "password" => $user->password,
+            "token" => $coded_token,
 
         ], 200);
-
     }
 
     /**
@@ -101,23 +101,28 @@ class UserController extends Controller
     public function login(Request $request)
     {
         $user = User::where('email', '=', $request->email)->first();
-        
+
+        $token = new Token($user->email);
+        $coded_token = $token->encode();
+
         if($user->password == $request->password)
         {
-            return response()->json("Puedes pasar");
+            return response()->json([
+
+                "token" => $coded_token,
+
+            ], 200 );
         
         }else{
 
-            return response()->json("No puedes pasar");
+            return response()->json([
+
+                "message" => "unauthorized",
+
+            ], 401);
 
         }
-
-        return response()->json([
-
-            "user name" => $user->name, 
-
-        ]); 
-        
+                
     }
 
 }
