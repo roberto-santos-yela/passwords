@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Helpers\Token;
 use App\User;
 use Closure;
 
@@ -16,14 +17,18 @@ class CheckUser
      */
     public function handle($request, Closure $next)
     {
+        $request_token = $request->header('Authorization');
+        $token = new Token();
+        $user_email = $token->decode($request_token);
+        $user = User::where('email', '=', $user_email)->first();
+
+        if($user != null)
+        {
+            return $next($request);
         
+        }
         
-        
-        
-        
-        
-        
-        
-        return $next($request);
+        //print_r($user_email); exit;
+         
     }
 }
