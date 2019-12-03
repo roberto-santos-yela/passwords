@@ -43,8 +43,6 @@ class CategoryController extends Controller
         $user_email = $token->decode($request_token);
         $user = User::where('email', '=', $user_email)->first();
                 
-        //var_dump($user->id); exit;
-        
         $category = new Category();
         $category->name = $request->name;
         $category->user_id = $user->id;

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Password;
+use App\Category;
 use Illuminate\Http\Request;
 
 class PasswordController extends Controller
@@ -34,16 +35,20 @@ class PasswordController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {        
+        $category = Category::where('name','=', $request->category)->first(); 
+               
         $password = new Password();
         $password->title = $request->title;
         $password->password = $request->password;
-        //$password->save();
+        $password->category_id = $category->id;             
+        $password->save();
 
         return response()->json([
 
             "title" => $password->title,
             "password" => $password->password,
+            "category" => $category->name,
             
         ], 200);
     }
