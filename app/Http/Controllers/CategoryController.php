@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\User;
+use App\Helpers\Token;
+use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -35,9 +38,17 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+        $request_token = $request->header('Authorization');
+        $token = new Token();
+        $user_email = $token->decode($request_token);
+        $user = User::where('email', '=', $user_email)->first();
+                
+        //var_dump($user->id); exit;
+        
         $category = new Category();
         $category->name = $request->name;
-        //$category->save();
+        $category->user_id = $user->id;
+        $category->save();
 
         return response()->json([
 
