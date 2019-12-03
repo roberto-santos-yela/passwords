@@ -37,20 +37,31 @@ class PasswordController extends Controller
     public function store(Request $request)
     {        
         $category = Category::where('name','=', $request->category)->first(); 
-               
-        $password = new Password();
-        $password->title = $request->title;
-        $password->password = $request->password;
-        $password->category_id = $category->id;             
-        $password->save();
 
-        return response()->json([
+        if($category != null)
+        {
+            $password = new Password();
+            $password->title = $request->title;
+            $password->password = $request->password;
+            $password->category_id = $category->id;             
+            $password->save();
 
-            "title" => $password->title,
-            "password" => $password->password,
-            "category" => $category->name,
-            
-        ], 200);
+            return response()->json([
+
+                "message" => "category $category->name created",
+
+            ], 201 );
+
+        }else{
+
+            return response()->json([
+
+                "message" => "$request->category category was not found in database",
+
+            ], 400);
+
+        }
+
     }
 
     /**
