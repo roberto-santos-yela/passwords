@@ -18,13 +18,12 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
-
+        
         return response()->json([
 
             "all_users" => $users,
-
+            
         ], 200);
-
 
     }
 
@@ -104,11 +103,15 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+
+        $user = User::find($id);
+        $user->delete();  
+    
     }
 
     public function login(Request $request)
     {
+
         $user = User::where('email', '=', $request->email)->first();
 
         $token = new Token($user->email);
