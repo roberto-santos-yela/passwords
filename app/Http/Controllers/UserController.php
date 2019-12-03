@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Helpers\Token;
+use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
 
 
@@ -41,7 +42,7 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = $request->password;
-        //$user->save();
+        $user->save();
 
         $token = new Token($user->email);
         $coded_token = $token->encode();
