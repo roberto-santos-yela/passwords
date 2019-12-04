@@ -16,4 +16,11 @@ class User extends Model
 
     }
 
+    public function passwords()
+    {
+
+        return $this->hasManyThrough('App\Password', 'App\Category');
+
+    }
+
 }
