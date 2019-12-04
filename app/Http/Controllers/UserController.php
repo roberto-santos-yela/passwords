@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use App\Helpers\Token;
 use Firebase\JWT\JWT;
+use App\Helpers\ParseInputStream;
 use Illuminate\Http\Request;
 
 
@@ -92,7 +93,17 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        $user = User::find($id);
+              
+        $params = [];
+        new ParseInputStream($params);
+
+        $user->name = $params['name'];
+        $user->email = $params['email'];
+        $user->password = $params['password'];
+        $user->save();
+   
     }
 
     /**

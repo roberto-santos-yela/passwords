@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Category;
 use App\User;
 use App\Helpers\Token;
+use App\Helpers\ParseInputStream;
 use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
 
@@ -108,8 +109,16 @@ class CategoryController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        //
+    {   
+
+        $category = Category::find($id);
+              
+        $params = [];
+        new ParseInputStream($params);
+             
+        $category->name = $params['name'];
+        $category->save();
+
     }
 
     /**

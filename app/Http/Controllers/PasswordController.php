@@ -6,6 +6,7 @@ use App\Password;
 use App\Category;
 use App\User;
 use App\Helpers\Token;
+use App\Helpers\ParseInputStream;
 use Illuminate\Http\Request;
 
 class PasswordController extends Controller
@@ -111,7 +112,15 @@ class PasswordController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $password = Password::find($id);
+              
+        $params = [];
+        new ParseInputStream($params);
+
+        $password->title = $params['title'];
+        $password->password = $params['password'];
+        $password->save();
+   
     }
 
     /**
