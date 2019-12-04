@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Password;
 use App\Category;
+use App\User;
+use App\Helpers\Token;
 use Illuminate\Http\Request;
 
 class PasswordController extends Controller
@@ -41,8 +43,16 @@ class PasswordController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {        
-        $category = Category::where('name','=', $request->category)->first(); 
+    {     
+           
+        $request_token = $request->header('Authorization');
+        $token = new Token();
+        $user_email = $token->decode($request_token);
+        $user = User::where('email', '=', $user_email)->first();
+
+        $category = Category::where('name','=', $request->category)
+        ->where('user_id', '=', $user->id)
+        ->first(); 
 
         if($category != null)
         {
@@ -54,7 +64,7 @@ class PasswordController extends Controller
 
             return response()->json([
 
-                "message" => "category $category->name created",
+                "message" => "password $request->title created.",
 
             ], 201 );
 
@@ -62,7 +72,7 @@ class PasswordController extends Controller
 
             return response()->json([
 
-                "message" => "$request->category category was not found in database",
+                "message" => "$request->category category was not found in database, please create a new category to continue.",
 
             ], 400);
 
