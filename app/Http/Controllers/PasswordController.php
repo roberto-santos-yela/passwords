@@ -127,4 +127,20 @@ class PasswordController extends Controller
         $password->delete();
 
     }
+
+    public function show_passwords(Request $request)
+    {
+
+        $request_token = $request->header('Authorization');
+        $token = new Token();
+        $user_email = $token->decode($request_token);
+        $user = User::where('email', '=', $user_email)->first();
+        
+        return response()->json([
+
+            "passwords created by this user" => $category->category,
+
+        ], 200);
+   
+    }
 }
