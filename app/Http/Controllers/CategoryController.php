@@ -125,4 +125,21 @@ class CategoryController extends Controller
         $category->delete();
 
     }
+
+    public function show_categories(Request $request)
+    {
+
+        $request_token = $request->header('Authorization');
+        $token = new Token();
+        $user_email = $token->decode($request_token);
+        $user = User::where('email', '=', $user_email)->first();
+
+        return response()->json([
+
+            "categories created by this user" => $user->categories,
+
+        ], 200);
+   
+    }
+
 }
