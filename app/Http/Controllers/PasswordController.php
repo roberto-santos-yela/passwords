@@ -45,11 +45,7 @@ class PasswordController extends Controller
      */
     public function store(Request $request)
     {     
-           
-        $request_token = $request->header('Authorization');
-        $token = new Token();
-        $user_email = $token->decode($request_token);
-        $user = User::where('email', '=', $user_email)->first();
+        $user = $request->user;
 
         $category = Category::where('name','=', $request->category)
         ->where('user_id', '=', $user->id)
@@ -140,14 +136,12 @@ class PasswordController extends Controller
     public function show_passwords(Request $request)
     {
 
-        $request_token = $request->header('Authorization');
-        $token = new Token();
-        $user_email = $token->decode($request_token);
-        $user = User::where('email', '=', $user_email)->first();
+        $user = $request->user;
+        $passwords = $user->passwords;
         
         return response()->json([
 
-            "passwords created by this user" => $category->category,
+            "passwords created by this user" => $passwords,
 
         ], 200);
    

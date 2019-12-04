@@ -45,11 +45,9 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $request_token = $request->header('Authorization');
-        $token = new Token();
-        $user_email = $token->decode($request_token);
-        $user = User::where('email', '=', $user_email)->first();
-
+               
+        $user = $request->user;
+       
         $repeated_category = Category::where('name', '=', $request->name)
         ->where('user_id', '=', $user->id)
         ->first();
@@ -138,11 +136,8 @@ class CategoryController extends Controller
     public function show_categories(Request $request)
     {
 
-        $request_token = $request->header('Authorization');
-        $token = new Token();
-        $user_email = $token->decode($request_token);
-        $user = User::where('email', '=', $user_email)->first();
-
+        $user = $request->user;
+        
         return response()->json([
 
             "categories created by this user" => $user->categories,
