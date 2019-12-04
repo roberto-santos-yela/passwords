@@ -22,6 +22,12 @@ class CheckUser
         $user_email = $token->decode($request_token);
         $user = User::where('email', '=', $user_email)->first();
 
+        $request->request->add([
+            
+            'user' => $user,
+            
+            ]);
+
         if($user != null)
         {
             return $next($request);
