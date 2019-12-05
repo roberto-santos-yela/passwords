@@ -125,12 +125,32 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-
+    public function destroy(Request $request, $id)
+    {         
+        $user_request = $request->user;
         $category = Category::find($id);
-        $category->delete();
+        $user_category = $category->user;
+        
+        if($user_request == $user_category)
+        {
+            $category->delete();
 
+            return response()->json([
+
+                "message" => "category deleted",
+
+            ], 200);
+            
+        }else{
+
+            return response()->json([
+
+                "message" => "can't delete categories that belong to other users",
+
+            ], 200);
+
+        }
+ 
     }
 
     public function show_categories(Request $request)
