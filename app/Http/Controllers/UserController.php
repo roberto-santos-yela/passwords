@@ -17,15 +17,9 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        $users = User::all();
-        
-        return response()->json([
-
-            "all_users" => $users,
-                        
-        ], 200);
-
+    {        
+        $users = User::all();        
+        return response()->json($users, 200);
     }
 
     /**
@@ -99,7 +93,7 @@ class UserController extends Controller
         $user = User::find($id);
         
         if($request_user->id == $user->id)
-        {
+        {            
             $user->name = $request->name;
             $user->email = $request->email;
             $user->password = $request->password;
