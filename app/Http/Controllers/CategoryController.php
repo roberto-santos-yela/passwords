@@ -108,15 +108,30 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {   
+        $user = $request->user;        
+        $category = Category::find($id);                 
+        
+        if($user->id == $category->user_id)
+        {            
+            $category->name = $request->name;       
+            $category->save();
 
-        $category = Category::find($id);
-              
-        $params = [];
-        new ParseInputStream($params);
-             
-        $category->name = $params['name'];
-        $category->save();
+            return response()->json([
 
+                "message" => "category updated",
+    
+            ], 200);
+
+        }else{
+
+            return response()->json([
+
+                "message" => "can't change other user's category",
+    
+            ], 401);
+  
+        }
+  
     }
 
     /**
@@ -156,14 +171,19 @@ class CategoryController extends Controller
     public function show_categories(Request $request)
     {
 
-        $user = $request->user;
-        
-        return response()->json([
-
-            "categories created by this user" => $user->categories,
-
-        ], 200);
+        $user = $request->user;        
+        return response()->json($user->categories, 200);
    
+    }
+    
+    public function show_passwords_with_categories(Request $request)
+    {
+
+        $user = $request->user; 
+        $user_categories_and_passwords = Category::where('user_id', '=', $user->id)->with('passwords')->get();
+       
+        return response()->json($user_categories_and_passwords, 400);
+
     }
 
 }
