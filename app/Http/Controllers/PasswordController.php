@@ -108,14 +108,32 @@ class PasswordController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request_user = $request->user;
         $password = Password::find($id);
-              
-        $params = [];
-        new ParseInputStream($params);
+        $category = $password->category;
+        $user = $category->user;
 
-        $password->title = $params['title'];
-        $password->password = $params['password'];
-        $password->save();
+        if($request_user == $user)
+        {
+            $password->title = $request->title;
+            $password->password = $request->password;
+            $password->save();
+
+            return response()->json([
+
+                "message" => "password updated",
+
+            ], 200);
+            
+        }else{
+
+            return response()->json([
+
+                "message" => "can't update passwords that belong to other users",
+
+            ], 200);
+
+        }
    
     }
 
@@ -127,10 +145,12 @@ class PasswordController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $user = $request->user;
+        $request_user = $request->user;
         $password = Password::find($id);
-        
-        if($user->id == $password->id_user)
+        $category = $password->category;
+        $user = $category->user;
+                
+        if($request_user == $user)
         {
             $password->delete();
 
@@ -155,14 +175,9 @@ class PasswordController extends Controller
     public function show_passwords(Request $request)
     {
 
-        $user = $request->user;
-        $passwords = $user->passwords;
-        
-        return response()->json([
-
-            "passwords created by this user" => $passwords,
-
-        ], 200);
+        $user = $request->user;               
+        return response()->json($user->passwords, 200);
    
     }
+
 }
