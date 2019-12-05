@@ -94,16 +94,33 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
 
-        $user = User::find($id);
-              
-        $params = [];
-        new ParseInputStream($params);
+        $request_user = $request->user;   
 
-        $user->name = $params['name'];
-        $user->email = $params['email'];
-        $user->password = $params['password'];
-        $user->save();
-   
+        $user = User::find($id);
+        
+        if($request_user->id == $user->id)
+        {
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = $request->password;
+            $user->save();   
+            
+            response()->json([
+
+                "message" => "user modified",
+
+            ], 200);
+
+        }else{
+
+            response()->json([
+
+                "message" => "can't modify another user",
+
+            ], 200);
+
+        }
+
     }
 
     /**
@@ -112,11 +129,30 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy(Request $request, $id)
+    {        
+        $user = $request->user;             
+        
+        if($user->id == $id)
+        {
+            $user->delete();  
 
-        $user = User::find($id);
-        $user->delete();  
+            return response()->json([
+
+                "message" => "user deleted",
+
+            ], 200);
+
+
+        }else{
+
+            return response()->json([
+
+                "message" => "you can't delete other users",
+
+            ], 401);
+
+        }
     
     }
 
