@@ -25,6 +25,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::ApiResource('/users', 'UserController');
     Route::ApiResource('/categories', 'CategoryController');
     Route::get('/show_categories', 'CategoryController@show_categories');
+    Route::get('/show_passwords_with_categories', 'CategoryController@show_passwords_with_categories');
     Route::ApiResource('/passwords', 'PasswordController');
     Route::get('/show_passwords', 'PasswordController@show_passwords');
 
