@@ -125,11 +125,30 @@ class PasswordController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        
+        $user = $request->user;
         $password = Password::find($id);
-        $password->delete();
+        
+        if($user->id == $password->id_user)
+        {
+            $password->delete();
+
+            return response()->json([
+
+                "message" => "password deleted",
+
+            ], 200);
+            
+        }else{
+
+            return response()->json([
+
+                "message" => "can't delete passwords that belong to other users",
+
+            ], 200);
+
+        }
 
     }
 
