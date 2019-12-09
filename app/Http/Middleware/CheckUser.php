@@ -33,8 +33,6 @@ class CheckUser
             return $next($request);
         
         }
-        
-        //print_r($user_email); exit;
          
     }
 }
