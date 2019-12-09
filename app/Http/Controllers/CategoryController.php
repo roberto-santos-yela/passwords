@@ -45,7 +45,7 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-               
+             
         $user = $request->user;
        
         $repeated_category = Category::where('name', '=', $request->name)
@@ -182,7 +182,7 @@ class CategoryController extends Controller
         $user = $request->user; 
         $user_categories_and_passwords = Category::where('user_id', '=', $user->id)->with('passwords')->get();
        
-        return response()->json($user_categories_and_passwords, 400);
+        return response()->json($user_categories_and_passwords, 200);
 
     }
 
